@@ -1,0 +1,68 @@
+/* Reset some default styles for consistency */
+body, h1, h2, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a background color and some basic styles to the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the header with the Shopping Cart title */
+h1 {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Style the main content containers */
+#cart, #products {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+/* Style the headings for Your Cart and Products sections */
+#cart h2, #products h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Style the buttons */
+button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+/* Style the cart items list */
+#cart-items {
+    list-style: none;
+}
+
+#cart-items li {
+    margin-bottom: 10px;
+}
+
+/* Style the total price */
+#cart-total {
+    font-weight: bold;
+}
+
+/* Add some spacing between the Clear Cart and Checkout buttons */
+#clear-cart {
+    margin-right: 20px;
+}

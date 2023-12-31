@@ -1,75 +1,75 @@
 <?php
 // Initialize the session
 session_start();
-
-// Check if the user is logged in, otherwise redirect to the login page
-if (!isset($_SESSION["login_user"])) {
+ 
+// Check if the user is logged in, otherwise redirect to login page
+if(!isset($_SESSION["login_user"])){
     header("location: login.php");
     exit;
 }
-
+ 
 // Include config file
 require_once "config.php";
-
+ 
 // Define variables and initialize with empty values
 $new_password = $confirm_password = "";
 $new_password_err = $confirm_password_err = "";
-
-// Processing form data when the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+ 
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
     // Validate new password
-    if (empty(trim($_POST["new_password"]))){
+    if(empty(trim($_POST["new_password"]))){
         $new_password_err = "Please enter the new password.";
-    } elseif (strlen(trim($_POST["new_password"])) < 6){
-        $new_password_err = "Password must have at least 6 characters.";
-    } else {
+    } elseif(strlen(trim($_POST["new_password"])) < 6){
+        $new_password_err = "Password must have atleast 6 characters.";
+    } else{
         $new_password = trim($_POST["new_password"]);
     }
-
+    
     // Validate confirm password
-    if (empty(trim($_POST["confirm_password"]))){
+    if(empty(trim($_POST["confirm_password"]))){
         $confirm_password_err = "Please confirm the password.";
-    } else {
+    } else{
         $confirm_password = trim($_POST["confirm_password"]);
-        if (empty($new_password_err) && ($new_password != $confirm_password)){
+        if(empty($new_password_err) && ($new_password != $confirm_password)){
             $confirm_password_err = "Password did not match.";
         }
     }
-
+        
     // Check input errors before updating the database
-    if (empty($new_password_err) && empty($confirm_password_err)) {
+    if(empty($new_password_err) && empty($confirm_password_err)){
         // Prepare an update statement
         $sql = "UPDATE users SET password = ? WHERE username = ?";
-
-        if ($stmt = mysqli_prepare($db, $sql)) {
+        
+        if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_id);
-
-            // Hash the new password
-            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+            
+            // Set parameters
+            $param_password = $new_password;
             $param_id = $_SESSION["login_user"];
-
+            
             // Attempt to execute the prepared statement
-            if (mysqli_stmt_execute($stmt)) {
-                // Password updated successfully. Destroy the session and redirect to the login page
+            if(mysqli_stmt_execute($stmt)){
+                // Password updated successfully. Destroy the session, and redirect to login page
                 session_destroy();
                 header("location: login.php");
                 exit();
-            } else {
+            } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
-            // Close the statement
+            // Close statement
             mysqli_stmt_close($stmt);
         }
     }
-
-    // Close the connection
+    
+    // Close connection
     mysqli_close($db);
 }
 ?>
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>

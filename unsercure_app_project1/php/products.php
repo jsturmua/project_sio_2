@@ -1,19 +1,18 @@
-<?php
+<?php 
 $pdo = new PDO('mysql:host=localhost;dbname=store', 'root', '165392');
 
-$search = isset($_POST['search']) ? $_POST['search'] : '';
-$category = isset($_POST['category']) ? $_POST['category'] : 'all';
+$search = $_POST['search'];
+$category = $_POST['category'];
 
 $sql = "SELECT * FROM products WHERE 1=1";
-$params = array();
 
-if ($category !== 'all') {$sql .= " AND category = :category"; $params[':category'] = $category;}
-if (!empty($search)) {$sql .= " AND name LIKE :search";$params[':search'] = "%$search%";}
+if ($category !== 'all') {$sql .= " AND category = '$category'";}
+if (!empty($search)) {$search = "%$search%";$sql .= " AND name LIKE '$search'";}
 
-$stmt = $pdo->prepare($sql);
+$result = $pdo->query($sql);
 
-if ($stmt->execute($params)) {
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($result !== false) {
+    $products = $result->fetchAll(PDO::FETCH_ASSOC);
 
     $html = '';
     foreach ($products as $product) {
@@ -27,5 +26,7 @@ if ($stmt->execute($params)) {
     }
 
     echo $html;
-} else {echo "Erro na consulta SQL";}
+} else {
+    echo "Erro na consulta SQL";
+}
 ?>

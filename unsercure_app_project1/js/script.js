@@ -50,10 +50,6 @@ function displayCart() {
             items: [],
             total: 0,
             addToCart: function (product, quantity) {
-                if (isNaN(quantity)) {
-                    alert("Error - requested amount is not a number");
-                    return 1;
-                }
                 if (quantity < 0) return;
                 const existingItem = this.items.find(item => item.name === product.name);
                 if (existingItem) {

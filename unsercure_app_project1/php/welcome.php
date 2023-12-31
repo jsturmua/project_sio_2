@@ -24,7 +24,7 @@ $loggedIn = isset($_SESSION['login_user']);
         <ul>
             <?php if ($loggedIn) { ?>
                 <li><a href="../products/products.html">Products</a></li>
-                <li><a href="../cart/cart.html">Cart</a></li>
+                <li><a href="../cartx/cart.html">Cart</a></li>
             <?php } else { ?>
                 <li><a href="login.php">Login</a></li>
             <?php } ?>

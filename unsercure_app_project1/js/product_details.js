@@ -6,11 +6,7 @@ $(document).ready(function() {
     $("#comment-form").submit(function (event) {
         event.preventDefault();
         
-        var username = $("#username").val();
-        var comment = $("#comment").val();
-
-        comment = $('<div />').text(comment).html();
-
+        var username = $("#username").val();var comment = $("#comment").val();
         var commentElement = $("<div class='comment'><strong>" + username + ":</strong> " + comment + "</div>");
 
         $("#comment-list").append(commentElement);

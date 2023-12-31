@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
     loadProducts();
     $('#search').on('input', function() {loadProducts();});
     $('#filter').click(function() {loadProducts();});

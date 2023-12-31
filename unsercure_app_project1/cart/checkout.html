@@ -67,11 +67,12 @@
     </div>
 
     <script>
-        function processPayment() {
+        function processPayment() { 
             alert('Payment processed successfully!');
             
-            let shippingData = new FormData(document.getElementById('shippingForm'));
-            let billingData = new FormData(document.getElementById('billingForm'));
+            let shippingData = document.getElementById('someElement').innerHTML = userInput;
+            let billingData = document.getElementById('someElement').innerHTML = userInput;
+            
         }
     </script>
 </body>
