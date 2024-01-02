@@ -1,6 +1,11 @@
 <?php
+
+include('reauthentication.php');
 session_start();
 $loggedIn = isset($_SESSION['login_user']);
+if ($loggedIn){
+    checkReauthentication();
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,12 +22,14 @@ $loggedIn = isset($_SESSION['login_user']);
         <h1>Welcome to the webshop</h1>
         <?php if ($loggedIn) { ?>
             <a href="logout.php">Logout</a>
+            <a href="reset_password.php">Reset Password</a>
         <?php } ?>
     </header>
 
     <nav>
         <ul>
             <?php if ($loggedIn) { ?>
+                checkReauthentication();
                 <li><a href="../products/products.html">Products</a></li>
                 <li><a href="../cart/cart.html">Cart</a></li>
             <?php } else { ?>

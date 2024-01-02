@@ -6,6 +6,33 @@ require_once "config.php";
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
+// Function to check if password is breached
+function isPasswordBreached($password) {
+    $hashedPassword = strtoupper(sha1((string)$password));
+    $prefix = substr($hashedPassword, 0, 5);
+    $suffix = substr($hashedPassword, 5);
+
+    $ch = curl_init();
+    $url = "https://api.pwnedpasswords.com/range/" . $prefix;
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    if ($response !== false) {
+        $matches = explode("\r\n", $response);
+        foreach ($matches as $match) {
+            list($hashSuffix, $count) = explode(":", $match);
+            if ($suffix === $hashSuffix) {
+                curl_close($ch);
+                return true; // Password is breached
+            }
+        }
+    }
+
+    curl_close($ch);
+    return false; // Password is not breached
+}
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
@@ -56,11 +83,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     console.log($timestamp + "Password validation\n");
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
-    } elseif(strlen(trim($_POST["password"])) < 6){
-        $password_err = "Password must have atleast 6 characters.";
-    } else{
-        $password = trim($_POST["password"]);
+    } else {
+        // Remove leading/trailing spaces and trim consecutive multiple spaces into one
+        $password = preg_replace('/\s+/', ' ', trim($_POST["password"]));
+
+        if(strlen($password) < 12){
+            $password_err = "Password must have at least 12 characters.";
+        } elseif(strlen($password) > 128){
+            $password_err = "Password must not have more than 128 characters.";
+        } elseif(strlen(preg_replace('/\s+/', ' ', $password)) < 12){
+            $password_err = "Password must be at least 12 characters after combining multiple spaces.";
+        } elseif (isPasswordBreached($password)) {
+            $password_err = "Password has been compromised in a data breach. Please choose a different password.";
+        }
     }
+
     
     // Validate confirm password
     if(empty(trim($_POST["confirm_password"]))){
@@ -117,7 +154,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <style>
         body{ font: 14px sans-serif; }
         .wrapper{ width: 360px; padding: 20px; }
+        .password-strength {
+            width: 200px;
+            height: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <script src="../js/password_strength.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -128,11 +173,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label>Username</label>
                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
-            </div>    
+            </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" onkeyup="checkPasswordStrength(this.value)">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                <div id="password-strength" class="password-strength"></div>
             </div>
             <div class="form-group">
                 <label>Confirm Password</label>

@@ -1,5 +1,32 @@
 <?php
+
 include("./config.php");
+
+function isPasswordBreached($password) {
+    $hashedPassword = strtoupper(sha1((string)$password));
+    $prefix = substr($hashedPassword, 0, 5);
+    $suffix = substr($hashedPassword, 5);
+
+    $ch = curl_init();
+    $url = "https://api.pwnedpasswords.com/range/" . $prefix;
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    if ($response !== false) {
+        $matches = explode("\r\n", $response);
+        foreach ($matches as $match) {
+            list($hashSuffix, $count) = explode(":", $match);
+            if ($suffix === $hashSuffix) {
+                curl_close($ch);
+                return true; // Password is breached
+            }
+        }
+    }
+
+    curl_close($ch);
+    return false; // Password is not breached
+}
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,6 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($mypassword, $hashedPassword)) {
                 $_SESSION['login_user'] = $myusername;
                 $_SESSION['login_role'] = $row['role'];
+                if (isPasswordBreached(trim($_POST["password"]))) {
+                    echo '<script type="text/javascript">alert("Please change your password - it is breached!");</script>';
+                }
                 header("location: welcome.php");
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
