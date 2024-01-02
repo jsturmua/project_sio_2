@@ -18,6 +18,9 @@ $new_password_err = $confirm_password_err = "";
 // Processing form data when the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    $t = time();
+    $timestamp = date("Y-m-d",$t);
+    console.log($timestamp + " New password validation\n");
     // Validate new password
     if (empty(trim($_POST["new_password"]))){
         $new_password_err = "Please enter the new password.";
