@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 function checkReauthentication() {
     if (isset($_SESSION['login_user'])) {
         $lastActivityTime = isset($_SESSION['last_activity']) ? $_SESSION['last_activity'] : 0;

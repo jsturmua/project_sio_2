@@ -1,5 +1,11 @@
 <?php
 session_start();
+include('reauthentication.php');
+session_start();
+$loggedIn = isset($_SESSION['login_user']);
+if ($loggedIn){
+    checkReauthentication();
+}
 
 // Check if the user is authenticated and has the role 'admin'
 if (isset($_SESSION['login_role']) && $_SESSION['login_role'] == 'admin') {

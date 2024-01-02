@@ -1,4 +1,10 @@
 <?php
+session_start();
+$loggedIn = isset($_SESSION['login_user']);
+if ($loggedIn){
+    $_SESSION['last_activity'] = time();
+}
+
 $pdo = new PDO('mysql:host=localhost;dbname=store', 'root', '165392');
 
 $productId = $_POST['id'];
