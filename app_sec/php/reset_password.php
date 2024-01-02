@@ -1,6 +1,6 @@
 <?php
 include('reauthentication.php');
-checkReauthentication();
+
 function isPasswordBreached($password) {
     $hashedPassword = strtoupper(sha1((string)$password));
     $prefix = substr($hashedPassword, 0, 5);
@@ -33,6 +33,8 @@ session_start();
 if (!isset($_SESSION["login_user"])) {
     header("location: login.php");
     exit;
+} else {
+    checkReauthentication();
 }
 
 // Include config file
@@ -50,18 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $t = time();
     $timestamp = date("Y-m-d",$t);
     console.log($timestamp + " New password validation\n");
-    // Validate new password
-    if (empty(trim($_POST["new_password"]))){
-        $new_password_err = "Please enter the new password.";
-    } elseif (strlen(trim($_POST["new_password"])) < 6){
-        $new_password_err = "Password must have at least 6 characters.";
-    // Validate current password
-    if (empty(trim($_POST["current_password"]))) {
-        $current_password_err = "Please enter your current password.";
-    } else {
-        $current_password = trim($_POST["current_password"]);
-    }
-
     // Validate password
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
