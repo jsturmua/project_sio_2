@@ -7,8 +7,8 @@ function checkReauthentication() {
         $inactiveDuration = 1800; // 30 minutes in seconds
 
         if (($currentTime - $lastActivityTime) > $inactiveDuration) {
-            // Redirect to login page
-            header("Location: login.php");
+            // Redirect to logout page
+            header("Location: logout.php");
             exit();
         }
 
