@@ -6,6 +6,40 @@ require_once "config.php";
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
+// Function to check if password is breached
+function isPasswordBreached($password) {
+    echo $password;
+    $hashedPassword = strtoupper(sha1((string)$password));
+    $prefix = substr($hashedPassword, 0, 5);
+    $suffix = substr($hashedPassword, 5);
+
+    $ch = curl_init();
+    $url = "https://api.pwnedpasswords.com/range/" . $prefix;
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    echo $url;
+    echo "\n";
+    echo $suffix . "\n\n";
+    if ($response !== false) {
+        $matches = explode("\r\n", $response);
+        foreach ($matches as $match) {
+            list($hashSuffix, $count) = explode(":", $match);
+            echo $hashSuffix . "\n";
+            if ($suffix === $hashSuffix) {
+                curl_close($ch);
+                return true; // Password is breached
+            }
+        }
+    }
+
+    curl_close($ch);
+    return false; // Password is not breached
+}
+
+
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
@@ -49,6 +83,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $password_err = "Please enter a password.";
     } elseif(strlen(trim($_POST["password"])) < 6){
         $password_err = "Password must have atleast 6 characters.";
+    } elseif (isPasswordBreached(trim($_POST["password"]))) {
+        $password_err = "Password has been compromised in a data breach. Please choose a different password.";
     } else{
         $password = trim($_POST["password"]);
     }
