@@ -44,6 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && $row = mysqli_fetch_array($result)) {
             // Verify the password using password_verify
             $hashedPassword = $row['password'];
+            $t = time();
+            $timestamp = date("Y-m-d",$t);
+            console.log($timestamp + "Password check\n");
             if (password_verify($mypassword, $hashedPassword)) {
                 $_SESSION['login_user'] = $myusername;
                 $_SESSION['login_role'] = $row['role'];
@@ -51,16 +54,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo '<script type="text/javascript">alert("Please change your password - it is breached!");</script>';
                 }
                 header("location: welcome.php");
+                $t = time();
+                $timestamp = date("Y-m-d",$t);
+                console.log($timestamp + " Valid user login\n");
                 exit; // Make sure to exit after a successful login to prevent further processing
             } else {
                 $login_err = "Your Login Name or Password is invalid";
+                $t = time();
+                $timestamp = date("Y-m-d",$t);
+                console.log($timestamp + " Error - invalid user login\n");
             }
         } else {
             $login_err = "Your Login Name or Password is invalid";
+            $t = time();
+            $timestamp = date("Y-m-d",$t);
+            console.log($timestamp + " Error - invalid user login\n");
         }
     } else {
         // Handle the query preparation error here, e.g., log the error or show an error message
-        die("Query preparation failed: " . mysqli_error($db));
+        $t = time();
+        $timestamp = date("Y-m-d",$t);
+        die($timestamp + "[1] Query preparation failed: " . mysqli_error($db)); // 1 - Unexpected error ID
     }
 }
 ?>
