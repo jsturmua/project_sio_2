@@ -8,7 +8,6 @@ $username_err = $password_err = $confirm_password_err = "";
  
 // Function to check if password is breached
 function isPasswordBreached($password) {
-    echo $password;
     $hashedPassword = strtoupper(sha1((string)$password));
     $prefix = substr($hashedPassword, 0, 5);
     $suffix = substr($hashedPassword, 5);
@@ -19,14 +18,10 @@ function isPasswordBreached($password) {
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
-    echo $url;
-    echo "\n";
-    echo $suffix . "\n\n";
     if ($response !== false) {
         $matches = explode("\r\n", $response);
         foreach ($matches as $match) {
             list($hashSuffix, $count) = explode(":", $match);
-            echo $hashSuffix . "\n";
             if ($suffix === $hashSuffix) {
                 curl_close($ch);
                 return true; // Password is breached
@@ -37,8 +32,6 @@ function isPasswordBreached($password) {
     curl_close($ch);
     return false; // Password is not breached
 }
-
-
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -141,7 +134,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <style>
         body{ font: 14px sans-serif; }
         .wrapper{ width: 360px; padding: 20px; }
+        .password-strength {
+            width: 200px;
+            height: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -155,9 +155,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>    
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" onkeyup="checkPasswordStrength(this.value)">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                <div id="password-strength" class="password-strength"></div>
             </div>
+            <script>
+                function checkPasswordStrength(password) {
+                    const result = zxcvbn(password); // Use zxcvbn to evaluate password strength
+                    const meter = document.getElementById('password-strength');
+
+                    // Update the meter with password strength
+                    meter.style.width = (result.score * 20) + '%';
+                    meter.style.backgroundColor = getColor(result.score);
+                }
+
+                // Function to set color based on strength
+                function getColor(score) {
+                    switch(score) {
+                        case 0: return 'red';
+                        case 1: return 'orange';
+                        case 2: return 'yellow';
+                        case 3: return 'green';
+                        case 4: return 'darkgreen';
+                        default: return 'black';
+                    }
+                }
+            </script>
             <div class="form-group">
                 <label>Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
