@@ -74,13 +74,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate password
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
-    } elseif(strlen(trim($_POST["password"])) < 6){
-        $password_err = "Password must have atleast 6 characters.";
-    } elseif (isPasswordBreached(trim($_POST["password"]))) {
-        $password_err = "Password has been compromised in a data breach. Please choose a different password.";
-    } else{
-        $password = trim($_POST["password"]);
+    } else {
+        // Remove leading/trailing spaces and trim consecutive multiple spaces into one
+        $password = preg_replace('/\s+/', ' ', trim($_POST["password"]));
+
+        if(strlen($password) < 12){
+            $password_err = "Password must have at least 12 characters.";
+        } elseif(strlen($password) > 128){
+            $password_err = "Password must not have more than 128 characters.";
+        } elseif(strlen(preg_replace('/\s+/', ' ', $password)) < 12){
+            $password_err = "Password must be at least 12 characters after combining multiple spaces.";
+        } elseif (isPasswordBreached($password)) {
+            $password_err = "Password has been compromised in a data breach. Please choose a different password.";
+        }
     }
+
     
     // Validate confirm password
     if(empty(trim($_POST["confirm_password"]))){
@@ -142,6 +150,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <script src="../js/password_strength.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -152,35 +161,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label>Username</label>
                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
-            </div>    
+            </div>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" onkeyup="checkPasswordStrength(this.value)">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
                 <div id="password-strength" class="password-strength"></div>
             </div>
-            <script>
-                function checkPasswordStrength(password) {
-                    const result = zxcvbn(password); // Use zxcvbn to evaluate password strength
-                    const meter = document.getElementById('password-strength');
-
-                    // Update the meter with password strength
-                    meter.style.width = (result.score * 20) + '%';
-                    meter.style.backgroundColor = getColor(result.score);
-                }
-
-                // Function to set color based on strength
-                function getColor(score) {
-                    switch(score) {
-                        case 0: return 'red';
-                        case 1: return 'orange';
-                        case 2: return 'yellow';
-                        case 3: return 'green';
-                        case 4: return 'darkgreen';
-                        default: return 'black';
-                    }
-                }
-            </script>
             <div class="form-group">
                 <label>Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
