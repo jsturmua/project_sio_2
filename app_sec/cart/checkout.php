@@ -1,5 +1,10 @@
 <?php
+include('reauthentication.php');
 session_start();
+$loggedIn = isset($_SESSION['login_user']);
+if ($loggedIn){
+    checkReauthentication();
+}
 try {
     $last_payment = $_SESSION['payment_time'];
     $t = time();
