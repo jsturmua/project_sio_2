@@ -1,15 +1,18 @@
-This project, as part of the Information Security in Organizations course project, tasked us with creating a web application for the DETI product store. The application was required to have an initial version with vulnerabilities and a second version with these vulnerabilities resolved.
+This project, as part of the Information Security in Organizations course project, tasked us with creating a web application for the DETI product store. The application was required to have an initial version and a second version with 6 improved issues. Furthermore we do the implementation of two software features in order to improve the application.
 
-To achieve this, we developed a simple application with a discreet design. While some functionalities are not 100% operational, they will not interfere with the main objective of the project, which is to demonstrate and correct these vulnerabilities.
+To achieve this, we developed a simple application with a discreet design. While some functionalities are not 100% operational, they will not interfere with the main objective of the project, which is to demonstrate and correct the issues.
 
-The vulnerabilities are as follows:
-- 2 SQL Injections
-- 2 Cross Site Scripting
-- 1 Plain text (CWE-256)
-- 1 Improper Input Validation (CWE-20)
+The issues are as follows:
+- Password Security Credentials - Jonathan Sturm
+- Session Management (Fundamental Session Management Requirements, Session Binding Requirements, Session Logout and Timeout Requirements) - Jonathan Sturm
+
+The two improved software features are these:
+- Password strength evaluation: requiring a minimum of strength for passwords according to V2.1, with
+breach verification using an external service; - Jonathan Sturm
+- 
+
 
 The authors of this project are:
-- Reuel Manoel 110317
 - Jonathan Sturm 117823
 - Georgi Vasilev 117783
 - Pedro Tomasetto 101094
