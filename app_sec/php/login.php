@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashedPassword = $row['password'];
             $t = time();
             $timestamp = date("Y-m-d",$t);
-            console.log($timestamp + "Password check\n");
+            syslog(LOG_INFO, $timestamp + "Password check\n");
             if (password_verify($mypassword, $hashedPassword)) {
                 $_SESSION['login_user'] = $myusername;
                 $_SESSION['login_role'] = $row['role'];
@@ -56,19 +56,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("location: welcome.php");
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                console.log($timestamp + " Valid user login\n");
+                syslog(LOG_INFO, $timestamp + " Valid user login\n");
                 exit; // Make sure to exit after a successful login to prevent further processing
             } else {
                 $login_err = "Your Login Name or Password is invalid";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                console.log($timestamp + " Error - invalid user login\n");
+                error_log($timestamp + " Invalid user login\n");
             }
         } else {
             $login_err = "Your Login Name or Password is invalid";
             $t = time();
             $timestamp = date("Y-m-d",$t);
-            console.log($timestamp + " Error - invalid user login\n");
+            error_log($timestamp + " Invalid user login\n");
         }
     } else {
         // Handle the query preparation error here, e.g., log the error or show an error message
