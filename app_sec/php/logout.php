@@ -12,7 +12,7 @@ setcookie('session_token', '', time() - 3600, '/', '', true, true); // Expire co
 $t = time();
 $timestamp = date("Y-m-d",$t);
 
-syslog(LOG_INFO, $timestamp + " Session terminated\n");
+syslog(LOG_INFO, $timestamp . " Session terminated\n");
 // Redirect to login page
 header("location: login.php");
 exit;

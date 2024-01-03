@@ -5,7 +5,21 @@ require_once "config.php";
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
- 
+
+
+function generateSecret($length = 16) {
+    $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // Base32 alphabet
+
+    $secret = '';
+    $random_bytes = random_bytes($length);
+    for ($i = 0; $i < $length; $i++) {
+        $index = ord($random_bytes[$i]) % strlen($alphabet);
+        $secret .= $alphabet[$index];
+    }
+
+    return $secret;
+}
+
 // Function to check if password is breached
 function isPasswordBreached($password) {
     $hashedPassword = strtoupper(sha1((string)$password));
@@ -39,7 +53,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate username
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    syslog(LOG_INFO, $timestamp + "Username validation\n");
+    syslog(LOG_INFO, $timestamp . "Username validation\n");
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter a username.";
     } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
@@ -69,7 +83,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 echo "Oops! Something went wrong. Please try again later.";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                error_log($timestamp + " Registration error\n")
+                error_log($timestamp + " Registration error\n");
             }
 
             // Close statement
@@ -80,7 +94,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate password
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    syslog(LOG_INFO, $timestamp + "Password validation\n");
+    syslog(LOG_INFO, $timestamp . "Password validation\n");
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
     } else {
@@ -108,31 +122,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $confirm_password_err = "Password did not match.";
         }
     }
+
+    // Validate two factor authentication
+    //Generate two factor token
+    $totpSecret = generateSecret(); // Generate totp secret
+    $url = "https://www.authenticatorApi.com/pair.aspx?AppName=DetiStore&AppInfo=$username&SecretCode=$totpSecret";
     
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($role_error)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-         
+        $sql = "INSERT INTO users (username, password, role, totp_secret) VALUES (?, ?, ?, ?)";
         if($stmt = mysqli_prepare($db, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_role);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_role, $param_totpSecret);
             
             // Set parameters
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             $param_role = 'user';
-            
+            $param_totpSecret = $totpSecret;
+
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
-                header("location: login.php");
+                header("Location: 2_factor.php?qr_code_url=" . urlencode($url));
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                syslog($timestamp + " Registration error - database statement not executed\n")
+                syslog($timestamp . " Registration error - database statement not executed\n");
             }
 
             // Close statement
