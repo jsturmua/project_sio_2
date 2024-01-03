@@ -48,6 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $timestamp = date("Y-m-d",$t);
             console.log($timestamp + "Password check\n");
             if (password_verify($mypassword, $hashedPassword)) {
+                // Generate a session token
+                $sessionToken = bin2hex(random_bytes(32)); // Generates a random 64-character token
+                // Store the token in a session variable
+                $_SESSION['session_token'] = $sessionToken;
+                // Set a cookie with the session token
+                setcookie('session_token', $sessionToken, time() + 3600, '/', '', false, true); // Cookie expires in 1 hour
                 $_SESSION['login_user'] = $myusername;
                 $_SESSION['login_role'] = $row['role'];
                 if (isPasswordBreached(trim($_POST["password"]))) {
