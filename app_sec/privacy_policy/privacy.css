@@ -1,0 +1,91 @@
+<<<<<<< Updated upstream
+/* Reset some default browser styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a basic style to the privacy policy section */
+#privacy-policy {
+    background-color: #f8f8f8;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+#privacy-policy h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#privacy-policy p {
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Style the consent form section */
+#consent-form {
+    margin-top: 20px;
+}
+
+#consent-form h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#consent-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#consent-form input {
+    margin-right: 5px;
+}
+=======
+/* Reset some default browser styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a basic style to the privacy policy section */
+#privacy-policy {
+    background-color: #f8f8f8;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+#privacy-policy h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#privacy-policy p {
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Style the consent form section */
+#consent-form {
+    margin-top: 20px;
+}
+
+#consent-form h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#consent-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#consent-form input {
+    margin-right: 5px;
+}
+>>>>>>> Stashed changes
