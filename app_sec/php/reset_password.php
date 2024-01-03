@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    console.log($timestamp + " New password validation\n");
+    syslog(LOG_INFO, $timestamp + " New password validation\n");
     // Validate password
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
