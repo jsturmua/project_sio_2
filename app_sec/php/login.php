@@ -2,6 +2,41 @@
 
 include("./config.php");
 
+function validateAuthenticationToken($secretCode, $pin){
+    $url =  "https://www.authenticatorApi.com/Validate.aspx?Pin=$pin&SecretCode=$secretCode";
+    // Initialize cURL session
+    $ch = curl_init($url);
+
+    // Set cURL options to retrieve the response
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // Execute cURL request
+    $response = curl_exec($ch);
+
+    // Check for errors and handle the response
+    if ($response === false) {
+        // Error occurred
+        $error = curl_error($ch);
+        echo "Error: $error";
+    } else {
+        // Successful response received, parse the HTML response
+        $dom = new DOMDocument();
+        $dom->loadHTML($response);
+        // Extract body content
+        $bodyContent = $dom->getElementsByTagName('body')->item(0)->nodeValue;
+        // Interpret the response content (assuming it's 'True' or 'False')
+        $validationResult = filter_var($bodyContent, FILTER_VALIDATE_BOOLEAN);
+        // Output the interpretation
+        if ($validationResult === true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Close cURL session
+    curl_close($ch);
+
+}
 function isPasswordBreached($password) {
     $hashedPassword = strtoupper(sha1((string)$password));
     $prefix = substr($hashedPassword, 0, 5);
@@ -44,28 +79,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && $row = mysqli_fetch_array($result)) {
             // Verify the password using password_verify
             $hashedPassword = $row['password'];
+            $totp_secret = $row['totp_secret'];
             $t = time();
             $timestamp = date("Y-m-d",$t);
-            syslog(LOG_INFO, $timestamp + "Password check\n");
+            syslog(LOG_INFO, $timestamp . "Password check\n");
             if (password_verify($mypassword, $hashedPassword)) {
-                // Generate a session token
-                $sessionToken = bin2hex(random_bytes(32)); // Generates a random 64-character token
-                // Store the token in a session variable
-                $_SESSION['session_token'] = $sessionToken;
-                // Set a cookie with the session token
-                setcookie('session_token', $sessionToken, time() + 3600, '/', '', true, true); // Cookie expires in 1 hour
-                $_SESSION['login_user'] = $myusername;
-                $_SESSION['login_role'] = $row['role'];
-                if (isPasswordBreached(trim($_POST["password"]))) {
-                    echo '<script type="text/javascript">alert("Please change your password - it is breached!");</script>';
+                if (validateAuthenticationToken($totp_secret, $_POST['2Ftoken'])){
+                    // Generate a session token
+                    $sessionToken = bin2hex(random_bytes(32)); // Generates a random 64-character token
+                    // Store the token in a session variable
+                    $_SESSION['session_token'] = $sessionToken;
+                    // Set a cookie with the session token
+                    setcookie('session_token', $sessionToken, time() + 3600, '/', '', true, true); // Cookie expires in 1 hour
+                    $_SESSION['login_user'] = $myusername;
+                    $_SESSION['login_role'] = $row['role'];
+                    if (isPasswordBreached(trim($_POST["password"]))) {
+                        echo '<script type="text/javascript">alert("Please change your password - it is breached!");</script>';
+                    }
+                    $_SESSION['last_activity'] = time();
+                    header("location: welcome.php");
+                    $t = time();
+                    $timestamp = date("Y-m-d",$t);
+                    syslog(LOG_INFO, $timestamp . " Valid user login\n");
+                    exit; // Make sure to exit after a successful login to prevent further processing
                 }
-                header("location: welcome.php");
-                $t = time();
-                $timestamp = date("Y-m-d",$t);
-                syslog(LOG_INFO, $timestamp + " Valid user login\n");
-                exit; // Make sure to exit after a successful login to prevent further processing
             } else {
-                $login_err = "Your Login Name or Password is invalid";
+                $login_err = "Your Login Name or Password 2FA Token is invalid";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
                 error_log($timestamp + " Invalid user login\n");
@@ -101,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="" method="post">
             <label>UserName :</label><input type="text" name="username" class="box" /><br /><br />
             <label>Password :</label><input type="password" name="password" class="box" /><br /><br />
+            <label>2-FA-Token :</label><input type="text" name="2Ftoken" class="box" /><br /><br />
             <input type="submit" value="Submit" /><br />
         </form>
         <p>Don't have an account? <a href="registration.php">Register here</a>.</p>
