@@ -39,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate username
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    console.log($timestamp + "Username validation\n");
+    syslog(LOG_INFO, $timestamp + "Username validation\n");
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter a username.";
     } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
@@ -69,7 +69,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 echo "Oops! Something went wrong. Please try again later.";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                console.log($timestamp + " Registration error\n")
+                error_log($timestamp + " Registration error\n")
             }
 
             // Close statement
@@ -80,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate password
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    console.log($timestamp + "Password validation\n");
+    syslog(LOG_INFO, $timestamp + "Password validation\n");
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
     } else {
@@ -132,7 +132,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 echo "Oops! Something went wrong. Please try again later.";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                console.log($timestamp + " Registration error - database statement not executed\n")
+                syslog($timestamp + " Registration error - database statement not executed\n")
             }
 
             // Close statement
