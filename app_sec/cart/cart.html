@@ -1,7 +1,3 @@
-<?php
-    include '../php/cart.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +6,7 @@
     <link rel="stylesheet" href="../css/cart.css">
     <title>Shopping Cart</title>
 </head>
-<body
+<body>
 
     <h1>Shopping Cart</h1>
 
@@ -18,7 +14,9 @@
         <h2>Your Cart</h2>
         <ul id="cart-items"><!-- Cart items will be dynamically added here --></ul>
         <p>Total: $<span id="cart-total">0.00</span></p>
-        <button id="checkout" action="" method="POST"><?php include('cart.php'); ?></button>
+        <form id="checkout-form" action="checkout.php" method="POST">
+            <button type="submit" id="checkout">Checkout</button>
+        </form>
         <button id="clear-cart">Clear Cart</button>
     </div>
 

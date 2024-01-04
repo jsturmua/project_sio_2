@@ -63,15 +63,20 @@
             <input type="text" id="cvv" required>
         </form>
 
-        <button onclick="processPayment()"><?php include('checkout.php'); ?>Complete Purchase</button>
+        <div id="checkoutContent"></div>
+        <button onclick="loadCheckoutContent()">Complete Purchase</button>
     </div>
 
     <script>
-        function processPayment() {
-            alert('Payment processed successfully!');
-            
-            let shippingData = new FormData(document.getElementById('shippingForm'));
-            let billingData = new FormData(document.getElementById('billingForm'));
+        function loadCheckoutContent() {
+            let checkoutContent = document.getElementById('checkoutContent');
+
+            fetch('checkout.php')
+                .then(response => response.text())
+                .then(data => {
+                    checkoutContent.innerHTML = data;
+                })
+                .catch(error => console.error('Error fetching checkout content:', error));
         }
     </script>
 </body>
