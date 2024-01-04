@@ -12,7 +12,9 @@ The issues are as follows:
 The two improved software features are these:
 - Password strength evaluation: requiring a minimum of strength for passwords according to V2.1, with
 breach verification using an external service; - Jonathan Sturm
-
+- Multi-factor Authentication (MFA) requiring the user to provide two or more verification factors to
+gain access to the Web application: TOTP authentication login: enable login via one-time passwords generated with TOTP to authorize
+access to the Web application (relevant ASVS requirements: ASVS V2.8);
 
 
 The authors of this project are:

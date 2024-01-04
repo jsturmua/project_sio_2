@@ -1,0 +1,25 @@
+[03-Jan-2024 22:04:39 Europe/Berlin] PHP Warning:  A non-numeric value encountered in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 57
+[03-Jan-2024 22:04:39 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php:57
+Stack trace:
+#0 {main}
+  thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 57
+[03-Jan-2024 22:05:36 Europe/Berlin] PHP Warning:  A non-numeric value encountered in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 97
+[03-Jan-2024 22:05:36 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php:97
+Stack trace:
+#0 {main}
+  thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 97
+[03-Jan-2024 22:06:45 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function base32_encode() in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php:12
+Stack trace:
+#0 \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php(130): hexToBase32('aaf8e2ed9603a01...')
+#1 {main}
+  thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 12
+[03-Jan-2024 22:15:05 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php:146
+Stack trace:
+#0 \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php(146): mysqli_stmt_bind_param(Object(mysqli_stmt), 'sss', 'Hallo123', NULL, NULL, NULL)
+#1 {main}
+  thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\registration.php on line 146
+[03-Jan-2024 22:53:46 Europe/Berlin] PHP Warning:  A non-numeric value encountered in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\login.php on line 89
+[03-Jan-2024 22:53:46 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\login.php:89
+Stack trace:
+#0 {main}
+  thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\login.php on line 89
