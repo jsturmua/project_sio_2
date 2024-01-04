@@ -14,7 +14,7 @@ The two improved software features are these:
 breach verification using an external service; - Jonathan Sturm
 - Multi-factor Authentication (MFA) requiring the user to provide two or more verification factors to
 gain access to the Web application: TOTP authentication login: enable login via one-time passwords generated with TOTP to authorize
-access to the Web application (relevant ASVS requirements: ASVS V2.8);
+access to the Web application (relevant ASVS requirements: ASVS V2.8); - Jonathan Sturm
 
 
 The authors of this project are:
