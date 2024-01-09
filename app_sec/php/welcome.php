@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include('reauthentication.php');
 $loggedIn = isset($_SESSION['login_user']);
 if ($loggedIn){
@@ -28,11 +28,14 @@ if ($loggedIn){
     <nav>
         <ul>
             <?php if ($loggedIn) { ?>
-                checkReauthentication();
                 <li><a href="../products/products.html">Products</a></li>
                 <li><a href="../cart/cart.html">Cart</a></li>
+                <li><a href="delete_data/delete_data.html">Delete Account</a></li>
+                <li><a href="privacy_policy/privacy.html">Privacy Policy</a></li>
             <?php } else { ?>
                 <li><a href="login.php">Login</a></li>
+                <li><a href="../products/products.html">Products</a></li>
+                <li><a href="privacy_policy/privacy.html">Privacy Policy</a></li>
             <?php } ?>
         </ul>
     </nav>

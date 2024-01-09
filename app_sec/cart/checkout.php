@@ -1,5 +1,18 @@
 <?php
-session_start();
+// Include reauthentication logic
+session_start():
+include('../php/reauthentication.php');
+
+$loggedIn = isset($_SESSION['login_user']);
+
+if ($loggedIn) {
+    // Log user access without logging sensitive data
+    logRequest("User access: IP $ip - User logged in.");
+    checkReauthentication();
+}
+else {
+    session_start();
+}
 
 // Function to log requests
 function logRequest($message) {
@@ -37,16 +50,6 @@ $threshold = 50;
 // Check and rate limit requests
 checkRequestRateLimit($ip, $threshold);
 
-// Include reauthentication logic
-include('reauthentication.php');
-
-$loggedIn = isset($_SESSION['login_user']);
-
-if ($loggedIn) {
-    // Log user access without logging sensitive data
-    logRequest("User access: IP $ip - User logged in.");
-    checkReauthentication();
-}
 
 try {
     // Log access to payment-related information without logging the sensitive data
