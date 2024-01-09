@@ -15,9 +15,9 @@ const products = [
 
 // Function to display products in the product-listings container
 function displayProducts() {
-    productList = document.getElementById('product-list');
+    let productList = document.getElementById('product-list');
 
-    productList.forEach(product => {
+    products.forEach(product => {
         const listItem = document.createElement('li');
         listItem.innerHTML = `
             <span class="product-name">${product.name}</span>
@@ -28,7 +28,7 @@ function displayProducts() {
 }
 
 function displayCart() {
-    const productList = document.getElementById('product-list');
+    const productList = document.getElementById('cart-list');
 
     // Filter the products array to include only items that are in the cart
     const productsInCart = products.filter(product => {
@@ -135,7 +135,7 @@ function displayCart() {
         // Load the cart from local storage on page load
         //cart.loadCartFromLocalStorage();
 
-        const productList = document.getElementById("product-list");
+        const productList = document.getElementById("cart-list");
 
         products.forEach(product => {
             const li = document.createElement('li');

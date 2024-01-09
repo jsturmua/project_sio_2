@@ -107,13 +107,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $login_err = "Your Login Name or Password 2FA Token is invalid";
                 $t = time();
                 $timestamp = date("Y-m-d",$t);
-                error_log($timestamp + " Invalid user login\n");
+                error_log($timestamp . " Invalid user login\n");
             }
         } else {
             $login_err = "Your Login Name or Password is invalid";
             $t = time();
             $timestamp = date("Y-m-d",$t);
-            error_log($timestamp + " Invalid user login\n");
+            error_log($timestamp . " Invalid user login\n");
         }
     } else {
         // Handle the query preparation error here, e.g., log the error or show an error message
