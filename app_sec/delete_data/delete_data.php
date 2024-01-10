@@ -38,7 +38,7 @@ $threshold = 50;
 checkRequestRateLimit($ip, $threshold);
 
 // Include reauthentication logic
-include('reauthentication.php');
+include('../php/reauthentication.php');
 
 $loggedIn = isset($_SESSION['login_user']);
 

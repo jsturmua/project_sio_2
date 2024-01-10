@@ -51,13 +51,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $t = time();
     $timestamp = date("Y-m-d",$t);
-    syslog(LOG_INFO, $timestamp + " New password validation\n");
+    syslog(LOG_INFO, $timestamp . " New password validation\n");
+    // Get entered current password
+    if (!empty(trim($_POST["current_password"]))) {
+        $current_password = trim($_POST["current_password"]);
+    } else {
+        $current_password_err = "Please enter your current password.";
+    }
     // Validate password
-    if(empty(trim($_POST["password"]))){
+    if(empty(trim($_POST["new_password"]))){
         $password_err = "Please enter a password.";
     } else {
         // Remove leading/trailing spaces and trim consecutive multiple spaces into one
-        $password = preg_replace('/\s+/', ' ', trim($_POST["password"]));
+        $password = preg_replace('/\s+/', ' ', trim($_POST["new_password"]));
 
         if(strlen($password) < 12){
             $password_err = "Password must have at least 12 characters.";
@@ -74,8 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["confirm_password"]))) {
         $confirm_password_err = "Please confirm the password.";
     } else {
-        $confirm_password = trim($_POST["confirm_password"]);
-        if (empty($new_password_err) && ($new_password != $confirm_password)) {
+        // Remove leading/trailing spaces and trim consecutive multiple spaces into one
+        $confirm_password = preg_replace('/\s+/', ' ', trim($_POST["confirm_password"]));
+        if (empty($new_password_err) && ($password != $confirm_password)) {
             $confirm_password_err = "Passwords did not match.";
         }
     }
