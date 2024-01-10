@@ -114,7 +114,7 @@ function displayCart() {
                         attackerAccount.boughtItems.push(p);
                     }
                     attackerAccount.accountTotal -= this.total;
-                    alert("Purchase completed\n");
+                    alert("Forward to checkout page\n");
                     return 0;
                 }
             },

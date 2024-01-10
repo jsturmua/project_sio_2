@@ -7,7 +7,7 @@ function checkReauthentication() {
 
         if (($currentTime - $lastActivityTime) > $inactiveDuration) {
             // Redirect to logout page
-            header("Location: logout.php");
+            header("Location: app_sec/php/logout.php");
             exit();
         }
 
