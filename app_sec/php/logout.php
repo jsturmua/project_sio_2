@@ -17,6 +17,6 @@ $timestamp = date("Y-m-d", $t);
 syslog(LOG_INFO, $timestamp . " Session terminated\n");
 
 // Redirect to login page
-header("location: login.php");
+header("location: /app_sec/index.html");
 exit;
 ?>
