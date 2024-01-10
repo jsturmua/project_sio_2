@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $update_sql = "UPDATE users SET password = ? WHERE username = ?";
                             if ($update_stmt = mysqli_prepare($db, $update_sql)) {
                                 mysqli_stmt_bind_param($update_stmt, "ss", $param_password, $param_id);
-                                $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+                                $param_password = password_hash($password, PASSWORD_DEFAULT);
                                 $param_id = $_SESSION["login_user"];
                                 if (mysqli_stmt_execute($update_stmt)) {
                                     // Password updated successfully. Destroy the session and redirect to the login page
