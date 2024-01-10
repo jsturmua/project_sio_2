@@ -10,7 +10,7 @@
     $qrCodeUrl = $_GET['qr_code_url'] ?? '';
 
     if ($qrCodeUrl) {
-        echo '<iframe src="' . $qrCodeUrl . '" width="600" height="320" frameborder="0"></iframe>'; 
+        echo '<iframe src="' . $qrCodeUrl . '" width="600" height="320" frameborder="0"></iframe>';
     } else {
         echo 'Something went wrong, please head to the administrator';
     }
