@@ -44,3 +44,13 @@ Stack trace:
   thrown in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\reset_password.php on line 54
 [09-Jan-2024 23:18:35 Europe/Berlin] PHP Warning:  Undefined array key "password" in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\reset_password.php on line 56
 [09-Jan-2024 23:19:32 Europe/Berlin] PHP Warning:  Undefined array key "password" in \\WSL$\UBUNTU\home\johnny\dev\portugal\cybersecurity\project_sio_2\app_sec\php\reset_password.php on line 56
+[10-Jan-2024 00:25:29 Europe/Berlin] 2024-01-10 Invalid user login
+
+[10-Jan-2024 00:25:48 Europe/Berlin] 2024-01-10 Invalid user login
+
+[10-Jan-2024 00:26:17 Europe/Berlin] 2024-01-10 Invalid user login
+
+[10-Jan-2024 00:26:37 Europe/Berlin] 2024-01-10 Invalid user login
+
+[10-Jan-2024 00:26:54 Europe/Berlin] 2024-01-10 Invalid user login
+

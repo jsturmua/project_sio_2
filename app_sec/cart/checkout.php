@@ -1,6 +1,6 @@
 <?php
 // Include reauthentication logic
-session_start():
+session_start();
 include('../php/reauthentication.php');
 
 $loggedIn = isset($_SESSION['login_user']);
@@ -11,7 +11,8 @@ if ($loggedIn) {
     checkReauthentication();
 }
 else {
-    session_start();
+    header("Location: ../php/login.php");
+    exit;
 }
 
 // Function to log requests
